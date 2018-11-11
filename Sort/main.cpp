@@ -103,22 +103,146 @@ void mergeSortBU(T arr[], int n) {
     }
 }
 
+template <typename T>
+int __partition(T arr[], int l, int r) {
+    // 选择随机的一个值作为基准
+    swap(arr[l], arr[rand() % (r - l + 1) + l]);
+    T e = arr[l];
+    int j = l + 1;
+    for (int i = l + 1; i <= r; i ++) {
+        if (arr[i] < e) {
+            swap(arr[j], arr[i]);
+            j ++;
+        }
+    }
+    swap(arr[j - 1], arr[l]);
+    return j - 1;
+}
+
+template <typename T>
+void __quickSort(T arr[], int l, int r) {
+    if (l >= r) {
+        return;
+    }
+    // 找到基准所在的位置
+    int p = __partition(arr, l, r);
+    // 对[l, p]进行快速排序
+    __quickSort(arr, l, p);
+    // 对[p + 1, r]进行快速排序
+    __quickSort(arr, p + 1, r);
+
+}
+
+template <typename T>
+void quickSort(T arr[], int n){
+    srand(time(NULL));
+    __quickSort(arr, 0, n-1);
+}
+
+template <typename T>
+int __partition2(T arr[], int l, int r) {
+    // 选择随机的一个值作为基准
+    swap(arr[l], arr[rand() % (r - l + 1) + l]);
+    T e = arr[l];
+    int i = l + 1, j = r;
+    while( true ) {
+        // 找到从左到右第一个比e大的值的位置
+        while( i <= r && arr[i] < e ) i++;
+        // 找到从右到左第一个比e小的值的位置
+        while( j >= l + 1 && arr[j] > e ) j--;
+        if ( i > j ) break;
+        swap(arr[i], arr[j]);
+        i ++;
+        j --;
+    }
+    swap(arr[l], arr[j]);
+    return j;
+}
+
+template <typename T>
+void __quickSort2(T arr[], int l, int r) {
+    if (l >= r) {
+        return;
+    }
+    // 找到基准所在的位置
+    int p = __partition2(arr, l, r);
+    // 对[l, p]进行快速排序
+    __quickSort2(arr, l, p - 1);
+    // 对[p + 1, r]进行快速排序
+    __quickSort2(arr, p + 1, r);
+
+}
+
+template <typename T>
+// 双路快排
+void quickSort2(T arr[], int n){
+    srand(time(NULL));
+    __quickSort2(arr, 0, n-1);
+}
+
+
+template <typename T>
+void __quickSort3(T arr[], int l, int r) {
+    if (l >= r) {
+        return;
+    }
+
+    swap(arr[l], arr[rand() % (r - l + 1) + l]);
+    T e = arr[l];
+
+    int lt = l; //[l + 1, lt] < e
+    int gt = r + 1; // [gt, r] > e
+    int i = l + 1; // [lt + 1, i) == e
+    while (i < gt) {
+       if (arr[i] < e) {
+           swap(arr[i], arr[lt + 1]);
+           lt ++;
+           i++;
+       } else if (arr[i] > e) {
+           swap(arr[i], arr[gt - 1]);
+           gt --;
+       } else {
+           i ++;
+       }
+    }
+    swap(arr[l], arr[lt]);
+
+    __quickSort3(arr, l, lt - 1);
+    __quickSort3(arr, gt, r);
+}
+
+template <typename T>
+// 三路快排
+void quickSort3(T arr[], int n){
+    srand(time(NULL));
+    __quickSort3(arr, 0, n-1);
+}
+
 int main() {
-    int n = 500000;
-//    int *arr = SortTestHelper::generateRandomArray(n, 0, 10000);
-    int *arr = SortTestHelper::generateNearlyOrderedArray(n, 0);
+    int n = 10000;
+    int *arr = SortTestHelper::generateRandomArray(n, 0, n);
+//    int *arr = SortTestHelper::generateNearlyOrderedArray(n, 0);
     int *arr2 = SortTestHelper::copyIntArray(arr, n);
     int *arr3 = SortTestHelper::copyIntArray(arr, n);
     int *arr4 = SortTestHelper::copyIntArray(arr, n);
+    int *arr5 = SortTestHelper::copyIntArray(arr, n);
+    int *arr6 = SortTestHelper::copyIntArray(arr, n);
+    int *arr7 = SortTestHelper::copyIntArray(arr, n);
 
     SortTestHelper::testSort("Selection Sort", selectionSort, arr, n);
     SortTestHelper::testSort("Insertion Sort", insertionSort, arr2, n);
     SortTestHelper::testSort("New Insertion Sort", newInsertionSort, arr3, n);
     SortTestHelper::testSort("Merge Sort", mergeSortBU, arr4, n);
+    SortTestHelper::testSort("Quick Sort", quickSort, arr5, n);
+    SortTestHelper::testSort("Quick2 Sort", quickSort2, arr6, n);
+    SortTestHelper::testSort("Quick3 Sort", quickSort3, arr7, n);
 
     delete []arr;
     delete []arr2;
     delete []arr3;
     delete []arr4;
+    delete []arr5;
+    delete []arr6;
+    delete []arr7;
     return 0;
 }
