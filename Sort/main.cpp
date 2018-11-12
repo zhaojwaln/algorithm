@@ -1,5 +1,6 @@
 #include <iostream>
 #include "SortTestHelper.h"
+#include "../ArrayHelper/ArrayHelper.h"
 
 using namespace std;
 
@@ -220,14 +221,14 @@ void quickSort3(T arr[], int n){
 
 int main() {
     int n = 10000;
-    int *arr = SortTestHelper::generateRandomArray(n, 0, n);
+    int *arr = ArrayHelper::generateRandomArray(n, 0, n);
 //    int *arr = SortTestHelper::generateNearlyOrderedArray(n, 0);
-    int *arr2 = SortTestHelper::copyIntArray(arr, n);
-    int *arr3 = SortTestHelper::copyIntArray(arr, n);
-    int *arr4 = SortTestHelper::copyIntArray(arr, n);
-    int *arr5 = SortTestHelper::copyIntArray(arr, n);
-    int *arr6 = SortTestHelper::copyIntArray(arr, n);
-    int *arr7 = SortTestHelper::copyIntArray(arr, n);
+    int *arr2 = ArrayHelper::copyIntArray(arr, n);
+    int *arr3 = ArrayHelper::copyIntArray(arr, n);
+    int *arr4 = ArrayHelper::copyIntArray(arr, n);
+    int *arr5 = ArrayHelper::copyIntArray(arr, n);
+    int *arr6 = ArrayHelper::copyIntArray(arr, n);
+    int *arr7 = ArrayHelper::copyIntArray(arr, n);
 
     SortTestHelper::testSort("Selection Sort", selectionSort, arr, n);
     SortTestHelper::testSort("Insertion Sort", insertionSort, arr2, n);
