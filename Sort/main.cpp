@@ -242,6 +242,37 @@ void heapSort2(T arr[], int n) {
     }
 }
 
+template <typename T>
+void __shiftDown(T arr[], int k, int n) {
+    while (2 * k + 1 < n) {
+        int j = 2*k+1;
+        // 左节点2*k+1,右节点2*k+2
+        if (j + 1 < n && arr[j + 1] > arr[j])
+            j += 1;
+        if (arr[k] > arr[j])
+            break;
+        swap(arr[j], arr[k]);
+        k = j;
+    }
+}
+
+// 不使用额外空间进行堆排序
+template <typename T>
+void heapSort3(T arr[], int n) {
+    // 1.将arr构建成一个最大堆
+    // 2.交换第一个元素和最后一个元素，则最后一个元素就是最大的元素
+    // 3.除去最后一个元素，对剩余的数组再次进行shiftDown操作，变成一个最大堆，再执行步骤2
+
+    for (int i = (n - 1) / 2; i >= 0; i --) {
+        __shiftDown(arr, i, n);
+    }
+
+    for (int i = n - 1; i > 0; i --) {
+        swap(arr[0], arr[i]);
+        __shiftDown(arr, 0, i);
+    }
+}
+
 int main() {
     int n = 10000;
     int *arr = ArrayHelper::generateRandomArray(n, 0, n);
@@ -254,6 +285,7 @@ int main() {
     int *arr7 = ArrayHelper::copyIntArray(arr, n);
     int *arr8 = ArrayHelper::copyIntArray(arr, n);
     int *arr9 = ArrayHelper::copyIntArray(arr, n);
+    int *arr10 = ArrayHelper::copyIntArray(arr, n);
 
     SortTestHelper::testSort("Selection Sort", selectionSort, arr, n);
     SortTestHelper::testSort("Insertion Sort", insertionSort, arr2, n);
@@ -264,6 +296,7 @@ int main() {
     SortTestHelper::testSort("Quick3 Sort", quickSort3, arr7, n);
     SortTestHelper::testSort("Heap1 Sort", heapSort1, arr8, n);
     SortTestHelper::testSort("Heap2 Sort", heapSort2, arr9, n);
+    SortTestHelper::testSort("Heap3 Sort", heapSort3, arr10, n);
 
     delete []arr;
     delete []arr2;
@@ -274,5 +307,6 @@ int main() {
     delete []arr7;
     delete []arr8;
     delete []arr9;
+    delete []arr10;
     return 0;
 }
