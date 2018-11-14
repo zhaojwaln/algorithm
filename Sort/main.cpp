@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SortTestHelper.h"
 #include "../ArrayHelper/ArrayHelper.h"
+#include "../DataStruct/MaxHeap/Heap.h"
 
 using namespace std;
 
@@ -219,6 +220,28 @@ void quickSort3(T arr[], int n){
     __quickSort3(arr, 0, n-1);
 }
 
+// 堆排序
+template <typename T>
+void heapSort1(T arr[], int n) {
+    MaxHeap<T> maxHeap = MaxHeap<T>(n);
+    for (int i = 0; i < n; i ++) {
+        maxHeap.insert(arr[i]);
+    }
+
+    for (int i = n - 1; i >= 0; i --) {
+        arr[i] = maxHeap.extractItem();
+    }
+}
+
+// 优化堆排序 优化创建最大堆的方式
+template <typename T>
+void heapSort2(T arr[], int n) {
+    MaxHeap<T> maxHeap = MaxHeap<T>(arr, n);
+    for (int i = n - 1; i >= 0; i --) {
+        arr[i] = maxHeap.extractItem();
+    }
+}
+
 int main() {
     int n = 10000;
     int *arr = ArrayHelper::generateRandomArray(n, 0, n);
@@ -229,6 +252,8 @@ int main() {
     int *arr5 = ArrayHelper::copyIntArray(arr, n);
     int *arr6 = ArrayHelper::copyIntArray(arr, n);
     int *arr7 = ArrayHelper::copyIntArray(arr, n);
+    int *arr8 = ArrayHelper::copyIntArray(arr, n);
+    int *arr9 = ArrayHelper::copyIntArray(arr, n);
 
     SortTestHelper::testSort("Selection Sort", selectionSort, arr, n);
     SortTestHelper::testSort("Insertion Sort", insertionSort, arr2, n);
@@ -237,6 +262,8 @@ int main() {
     SortTestHelper::testSort("Quick Sort", quickSort, arr5, n);
     SortTestHelper::testSort("Quick2 Sort", quickSort2, arr6, n);
     SortTestHelper::testSort("Quick3 Sort", quickSort3, arr7, n);
+    SortTestHelper::testSort("Heap1 Sort", heapSort1, arr8, n);
+    SortTestHelper::testSort("Heap2 Sort", heapSort2, arr9, n);
 
     delete []arr;
     delete []arr2;
@@ -245,5 +272,7 @@ int main() {
     delete []arr5;
     delete []arr6;
     delete []arr7;
+    delete []arr8;
+    delete []arr9;
     return 0;
 }
